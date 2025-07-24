@@ -24,3 +24,19 @@ jobs:
           script: |
             cd testcicd
             git pull origin master
+
+      - name: ✅ Notifikasi Sukses
+        if: success()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+          -d text="✅ Bang Ricky Deploy ke server BERHASIL 🎉\nBranch: master\nProject: testcicd"
+
+      - name: ❌ Notifikasi Gagal
+        if: failure()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+          -d text="❌ Bang Ricky Deploy GAGAL!\nCek GitHub Actions untuk lihat error-nya ya, Bang!"
+
+
