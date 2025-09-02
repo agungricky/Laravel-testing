@@ -21,14 +21,20 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
     public function definition(): array
     {
+        $faker = \Faker\Factory::create('id_ID');
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $faker->name(),
+            'email' => $faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'password' => Hash::make('12345678'),
+            'role' => $faker->randomElement(['admin', 'user']),
+            'no_telp' => $faker->numerify('+68##########'),
+            'alamat' => $faker->address(),
+            'remember_token' => \Illuminate\Support\Str::random(10),
         ];
     }
 
@@ -37,7 +43,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
